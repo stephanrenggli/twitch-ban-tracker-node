@@ -1,0 +1,26 @@
+version: '2.3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: 16-buster
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+    network_mode: service:db
+
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    volumes:
+      - mongodb-data:/data/db
+    labels:
+      - com.centurylinklabs.watchtower.enable=false
+
+volumes:
+  mongodb-data:
