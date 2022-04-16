@@ -1,0 +1,6 @@
+.devcontainer/
+config/
+node_modules/
+.gitignore
+.prettierrc
+.README.md

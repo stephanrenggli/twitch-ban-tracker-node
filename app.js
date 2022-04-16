@@ -6,7 +6,16 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const User = require('./models/Users');
 const twitch = require('./controllers/twitch');
-require('dotenv/config');
+const { Gotify } = require('gotify');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, './config/.env') });
+
+const gotifyUrl = process.env.GOTIFY_URL;
+const gotifyAppToken = process.env.GOTIFY_APP_TOKEN;
+
+const gotifyClient = new Gotify({
+  server: gotifyUrl,
+});
 
 // Middlewares
 // Parse request body on every request
@@ -65,6 +74,12 @@ async function updateBans() {
         lastUpdated: timestamp,
       };
       console.log(`User ${username} was banned.`);
+      await gotifyClient.send({
+        app: gotifyAppToken,
+        title: 'Twitch Ban Tracker',
+        message: `User ${username} was banned!`,
+        priority: 5,
+      });
       newBans.push(username);
       await User.findOneAndUpdate(filter, update);
     }
@@ -77,6 +92,12 @@ async function updateBans() {
         lastUpdated: timestamp,
       };
       console.log(`User ${username} was unbanned.`);
+      await gotifyClient.send({
+        app: gotifyAppToken,
+        title: 'Twitch Ban Tracker',
+        message: `User ${username} was unbanned!\nhttps://twitch.tv/${username}`,
+        priority: 5,
+      });
       newUnbans.push(username);
       await User.findOneAndUpdate(filter, update);
     }

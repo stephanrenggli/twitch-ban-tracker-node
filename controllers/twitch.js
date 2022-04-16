@@ -1,4 +1,5 @@
-require('dotenv/config');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../config/.env') });
 
 // Authenticate with Twitch API
 const { ClientCredentialsAuthProvider } = require('@twurple/auth');
