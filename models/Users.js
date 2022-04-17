@@ -5,6 +5,9 @@ const UsersSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  trackingReason: {
+    type: String,
+  },
   banned: {
     type: Boolean,
     default: false,

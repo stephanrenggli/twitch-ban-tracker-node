@@ -35,6 +35,7 @@ router.get('/:username', async (req, res) => {
 router.post('/', async (req, res) => {
   const timestamp = Date.now();
   const username = req.body.username;
+  const trackingReason = req.body.trackingReason;
 
   const test = await User.find({
     username: username,
@@ -43,6 +44,7 @@ router.post('/', async (req, res) => {
   if (test.length == 0) {
     const user = new User({
       username: username,
+      trackingReason: trackingReason,
       banned: await twitch.isUserBanned(username),
       trackedAt: timestamp,
     });
@@ -53,7 +55,7 @@ router.post('/', async (req, res) => {
       res.status(400).json({ message: error });
     }
   } else {
-    res.status(409).json({ message: 'user is already being tracked' });
+    res.status(409).json(test[0]);
   }
 });
 
