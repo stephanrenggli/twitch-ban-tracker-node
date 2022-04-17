@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const User = require('./models/Users');
@@ -20,6 +21,7 @@ const gotifyClient = new Gotify({
 // Middlewares
 // Parse request body on every request
 app.use(bodyParser.json());
+app.use(cors({ origin: '*' }));
 
 // Import Routes
 const usersRoute = require('./routes/users');
